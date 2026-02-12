@@ -1,15 +1,102 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ product.name }} - Stubborn{% endblock %}
+{% block title %}{{ product.name }}{% endblock %}
 
 {% block body %}
-<h1>{{ product.name }}</h1>
-<img src="{{ asset(product.image) }}" alt="{{ product.name }}" style="max-width:300px;">
-<p>Prix : {{ product.price }} €</p>
-<p>Stock XS : {{ product.stockXS }}</p>
-<p>Stock S : {{ product.stockS }}</p>
-<p>Stock M : {{ product.stockM }}</p>
-<p>Stock L : {{ product.stockL }}</p>
-<p>Stock XL : {{ product.stockXL }}</p>
-<a href="{{ path('products') }}">Retour à la boutique</a>
+<div class="product-wrapper">
+    <div class="product-box">
+        <h1>{{ product.name }}</h1>
+        <hr class="separator">
+
+        <div class="product-image">
+            <img src="{{ asset(product.image) }}" 
+                alt="{{ product.name }}" 
+                onerror="this.onerror=null;this.src='{{ asset('images/products/default.jpeg') }}';">
+        </div>
+
+        <p class="price">Prix : {{ product.price }} €</p>
+
+        <div class="stock">
+            <p>Stock disponible :</p>
+            <ul>
+                <li>XS : {{ product.stockXS }}</li>
+                <li>S : {{ product.stockS }}</li>
+                <li>M : {{ product.stockM }}</li>
+                <li>L : {{ product.stockL }}</li>
+                <li>XL : {{ product.stockXL }}</li>
+            </ul>
+        </div>
+
+        <a href="{{ path('app_products') }}" class="btn-back">Retour à la liste des produits</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+<style>
+.product-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 80vh;
+    padding: 20px;
+}
+
+.product-box {
+    width: 400px;
+    padding: 30px 40px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.product-box h1 {
+    margin-bottom: 10px;
+}
+
+.product-box hr.separator {
+    margin: 20px 0;
+    border: none;
+    border-top: 2px solid #eee;
+}
+
+.product-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.price {
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.stock ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+.stock li {
+    margin: 3px 0;
+}
+
+.btn-back {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background-color: #007BFF;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.btn-back:hover {
+    background-color: #0056b3;
+}
+</style>
 {% endblock %}
