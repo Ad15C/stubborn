@@ -16,8 +16,12 @@
     <label for="password">Mot de passe :</label>
     <input type="password" id="password" name="_password" required>
 
+    <input type="hidden" name="_csrf_token"
+           value="{{ csrf_token('authenticate') }}">
+
     <button type="submit">Se connecter</button>
 </form>
+
 
 <p>Pas encore inscrit ? <a href="{{ path('app_register') }}">Créer un compte</a></p>
 <p><a href="{{ path('home') }}">Retour à l'accueil</a></p>

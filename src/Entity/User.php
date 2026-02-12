@@ -32,7 +32,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $deliveryAddress = null;
 
     #[ORM\Column(type: "boolean")]
-    private bool $isVerified = false;
+    private bool $isVerified = false; // pour vérifier si l'utilisateur a activé son compte
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $verificationToken = null; // token unique pour l'email
 
     // Getters & Setters //
 
@@ -92,7 +95,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPassword(string $password): static
     {
         $this->password = $password;
-
         return $this;
     }
 
@@ -107,16 +109,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getIsVerified(): bool
+    public function isVerified(): bool
     {
         return $this->isVerified;
     }
 
-    public function setIsVerified(bool $isVerified): static
+    public function setIsVerified(bool $verified): static
     {
-        $this->isVerified = $isVerified;
+        $this->isVerified = $verified;
         return $this;
     }
+
+    public function getVerificationToken(): ?string
+    {
+        return $this->verificationToken;
+    }
+
+    public function setVerificationToken(?string $token): static
+    {
+        $this->verificationToken = $token;
+        return $this;
+    }
+
 
     public function eraseCredentials(): void
     {
