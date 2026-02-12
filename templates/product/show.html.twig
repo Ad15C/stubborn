@@ -1,102 +1,260 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ product.name }}{% endblock %}
+{% block title %}Détail du sweat-shirt{% endblock %}
 
 {% block body %}
 <div class="product-wrapper">
     <div class="product-box">
-        <h1>{{ product.name }}</h1>
-        <hr class="separator">
 
-        <div class="product-image">
-            <img src="{{ asset(product.image) }}" 
-                alt="{{ product.name }}" 
-                onerror="this.onerror=null;this.src='{{ asset('images/products/default.jpeg') }}';">
-        </div>
+        <div class="product-container">
+            
+            <!-- Partie gauche : image -->
+            <div class="product-image">
+                <img src="{{ asset(product.image) }}" 
+                     alt="{{ product.name }}" 
+                     onerror="this.onerror=null;this.src='{{ asset('images/products/default.jpeg') }}';">
+            </div>
 
-        <p class="price">Prix : {{ product.price }} €</p>
+            <!-- Partie droite -->
+            <div class="product-details">
 
-        <div class="stock">
-            <p>Stock disponible :</p>
-            <ul>
-                <li>XS : {{ product.stockXS }}</li>
-                <li>S : {{ product.stockS }}</li>
-                <li>M : {{ product.stockM }}</li>
-                <li>L : {{ product.stockL }}</li>
-                <li>XL : {{ product.stockXL }}</li>
-            </ul>
-        </div>
+                <form method="POST" action="{{ path('cart_add', {id: product.id}) }}">
 
-        <a href="{{ path('app_products') }}" class="btn-back">Retour à la liste des produits</a>
-    </div>
+                    <!-- Partie supérieure -->
+                    <div class="details-top">
+
+                        <div class="column-left">
+                            <p><strong>Nom :</strong> {{ product.name }}</p>
+                            <p><strong>Prix :</strong> {{ product.price }} €</p>
+                        </div>
+
+                        <div class="column-right">
+                            <div class="size-box">
+                                <p><strong>Taille :</strong></p>
+                                <hr>
+
+                                <div class="sizes">
+                                    <label class="size-option">
+                                        <input type="radio" name="size" value="XS" required>
+                                        <span>XS</span>
+                                    </label>
+
+                                    <label class="size-option">
+                                        <input type="radio" name="size" value="S">
+                                        <span>S</span>
+                                    </label>
+
+                                    <label class="size-option">
+                                        <input type="radio" name="size" value="M">
+                                        <span>M</span>
+                                    </label>
+
+                                    <label class="size-option">
+                                        <input type="radio" name="size" value="L">
+                                        <span>L</span>
+                                    </label>
+
+                                    <label class="size-option">
+                                        <input type="radio" name="size" value="XL">
+                                        <span>XL</span>
+                                    </label>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Ligne bouton -->
+                    <div class="add-row">
+                        <button type="submit" class="btn-add">
+                            Ajouter au panier
+                        </button>
+                    </div>
+
+                </form>
+
+            </div> <!-- FIN product-details -->
+
+        </div> <!-- FIN product-container -->
+
+        <!-- Lien retour -->
+        <p style="margin-top:20px; text-align:center;">
+            <a href="{{ path('app_products') }}">← Retour à la liste des produits</a>
+        </p>
+
+    </div> <!-- FIN product-box -->
 </div>
-{% endblock %}
 
-{% block stylesheets %}
+
 <style>
 .product-wrapper {
     display: flex;
     justify-content: center;
-    align-items: flex-start;
-    min-height: 80vh;
-    padding: 20px;
+    padding: 40px 20px;
 }
 
+/* Grand encadré */
 .product-box {
-    width: 400px;
-    padding: 30px 40px;
-    border: 1px solid #ccc;
+    width: 90%;
+    max-width: 1000px;
+    border: 2px solid #ccc;
     border-radius: 10px;
     background-color: #fff;
+    padding: 20px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    text-align: center;
 }
 
-.product-box h1 {
-    margin-bottom: 10px;
+/* Container principal : image à gauche, infos à droite */
+.product-container {
+    display: flex;
+    gap: 20px;
 }
 
-.product-box hr.separator {
-    margin: 20px 0;
-    border: none;
-    border-top: 2px solid #eee;
+/* Image à gauche */
+.product-image {
+    flex: 1;
 }
 
 .product-image img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* Partie droite */
+.product-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 20px;
+}
+
+/* Partie supérieure : deux colonnes centrées verticalement */
+.details-top {
+    display: flex;
+    gap: 20px;
+    justify-content: center; /* centre horizontalement */
+    align-items: center;     /* centre verticalement */
+}
+
+.column-left, .column-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.column-left p {
+    margin: 8px 0;
+}
+
+/* Encadré tailles */
+.size-box {
+    border: 1px solid #ccc;
     border-radius: 5px;
-    margin-bottom: 15px;
+    padding: 10px;
 }
 
-.price {
-    font-weight: bold;
-    margin-bottom: 15px;
+.size-box hr {
+    border: none;
+    border-top: 1px solid #ccc;
+    margin: 5px 0 10px 0;
 }
 
-.stock ul {
-    list-style: none;
-    padding: 0;
-    margin-bottom: 20px;
+.size-box p {
+    text-align: center;
+    margin-bottom: 5px;
 }
 
-.stock li {
-    margin: 3px 0;
+/* Container tailles */
+.sizes {
+    display: flex;
+    flex-direction: column; /* vertical */
+    gap: 8px;
 }
 
-.btn-back {
-    display: block;
+/* Cache le vrai bouton radio */
+.size-option input {
     width: 100%;
-    padding: 12px;
+     display: none; 
+}
+
+/* Style visuel des tailles */
+.size-option span {
+    display: block;          /* prend toute la largeur */
+    width: 100%;
+    padding: 8px 0;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+/* Effet hover */
+.size-option span:hover {
+    background-color: #f0f0f0;
+    display: inline-block;
+}
+
+/* Taille sélectionnée */
+.size-option input:checked + span {
     background-color: #007BFF;
     color: white;
-    font-weight: bold;
-    text-decoration: none;
-    border-radius: 5px;
+    border-color: #007BFF;
 }
 
-.btn-back:hover {
-    background-color: #0056b3;
+/* Ligne bouton sur toute la largeur de la partie droite */
+.add-row {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.btn-add {
+    width: 60%; /* bouton plus petit que la moitié droite */
+    padding: 10px;
+    background-color: #28a745;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.btn-add:hover {
+    background-color: #218838;
+}
+
+/* Lien retour */
+a {
+    color: #007BFF;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .product-container {
+        flex-direction: column;
+    }
+
+    .details-top {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .add-row {
+        margin-top: 15px;
+    }
+
+    .btn-add {
+        width: 80%;
+    }
 }
 </style>
 {% endblock %}
