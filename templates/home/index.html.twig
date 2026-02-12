@@ -11,12 +11,16 @@
 <section class="featured-products">
     {% for product in featuredProducts %}
         <div class="product-card">
-            <img src="{{ asset(product.image) }}" alt="{{ product.name }}">
-            <h3> Nom: {{ product.name }}</h3>
-            <p>Prix: {{ product.price|number_format(2, '.', ',') }} €</p>
-            {% if app.user %}
-                <a href="{{ path('product_show', {'id': product.id}) }}">Voir</a>
-            {% endif %}
+            {# Utilise directement le chemin stocké en base #}
+            {% set imagePath = product.image %}
+            
+            <img src="{{ asset(imagePath) }}" 
+                 alt="{{ product.name }}" 
+                 onerror="this.onerror=null;this.src='{{ asset('images/products/default.jpeg') }}';">
+            
+            <h3>{{ product.name }}</h3>
+            <p>{{ product.price }} €</p>
+            <a href="{{ path('product_show', {'id': product.id}) }}" class="btn-view">Voir</a>
         </div>
     {% endfor %}
 </section>

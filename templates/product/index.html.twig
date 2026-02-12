@@ -1,0 +1,163 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Produits{% endblock %}
+
+{% block body %}
+<h1>Nos produits</h1>
+<hr class="separator">
+
+<div class="products-page">
+    {# Sidebar filtre #}
+    <aside class="products-sidebar">
+        <h2>Filtrer par prix</h2>
+        <div class="price-filter">
+            <a href="{{ path('app_products', {'min': 10, 'max': 29}) }}">10 à 29 €</a>
+            <a href="{{ path('app_products', {'min': 30, 'max': 35}) }}">30 à 35 €</a>
+            <a href="{{ path('app_products', {'min': 35, 'max': 50}) }}">35 à 50 €</a>
+        </div>
+    </aside>
+
+    {# Contenu produits #}
+    <div class="products-grid">
+        {% for product in products %}
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="{{ asset(product.image) }}" 
+                        alt="{{ product.name }}" 
+                        onerror="this.onerror=null;this.src='{{ asset('images/products/default.jpeg') }}';">
+                </div>
+                <div class="product-info">
+                    <h2>{{ product.name }}</h2>
+                    <p class="price">{{ product.price }} €</p>
+                </div>
+                <div class="product-actions">
+                    <a href="{{ path('product_show', {'id': product.id}) }}" class="btn-view">Voir</a>
+                </div>
+            </div>
+        {% else %}
+            <p>Aucun produit disponible pour le moment.</p>
+        {% endfor %}
+            </div>
+    </div>
+
+    <p><a href="{{ path('home') }}">Retour à l'accueil</a></p>
+{% endblock %}
+
+{% block stylesheets %}
+<style>
+.products-page {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* Sidebar */
+.products-sidebar {
+    flex: 0 0 200px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    height: fit-content;
+}
+
+.products-sidebar h2 {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.products-sidebar .price-filter a {
+    display: block;
+    margin-bottom: 8px;
+    padding: 8px;
+    background-color: #007BFF;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.products-sidebar .price-filter a:hover {
+    background-color: #0056b3;
+}
+
+/* Produits */
+.products-grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.product-card {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 15px;
+    background-color: #fff;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.product-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.product-info h2 {
+    font-size: 1.1em;
+    margin: 10px 0 5px;
+    text-align: center;
+}
+
+.product-info .price {
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.product-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-view {
+    padding: 8px 12px;
+    background-color: #007BFF;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+.btn-view:hover {
+    background-color: #0056b3;
+}
+
+.separator {
+    border: none;
+    border-top: 2px solid #eee;
+    margin: 20px 0;
+}
+
+/* === Responsive === */
+@media screen and (max-width: 768px) {
+    .products-page {
+        flex-direction: column;
+    }
+
+    .products-sidebar {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .products-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %}
