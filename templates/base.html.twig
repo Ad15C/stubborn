@@ -1,17 +1,125 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Stubborn{% endblock %}</title>
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+</head>
+<body>
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
-    </head>
-    <body>
+    <!-- HEADER / MENU -->
+    <header style="display:flex; justify-content:space-between; align-items:center; padding:10px 20px; background:#f5f5f5;">
+        <!-- Logo et slogan à gauche -->
+        <div class="logo-slogan" style="display:flex; flex-direction:column; align-items:flex-start;">
+            <a href="{{ path('home') }}">
+                <img src="{{ asset('/images/logo/Logo.png') }}" alt="Stubborn Logo" style="height:50px;">
+            </a>
+            <span style="font-size:0.9em; color:#555;">Don't compromise on your look</span>
+        </div>
+
+        <nav>
+            {% if app.user %}
+                <!-- Menu connecté -->
+                <a href="{{ path('home') }}" class="{{ currentRoute == 'home' ? 'active' : '' }}">Accueil</a>
+                <a href="{{ path('products') }}" class="{{ currentRoute == 'products' ? 'active' : '' }}">Boutique</a>
+                <a href="{{ path('cart') }}" class="{{ currentRoute == 'cart' ? 'active' : '' }}">Panier</a>
+                <a href="{{ path('app_logout') }}">Se déconnecter</a>
+            {% else %}
+                <!-- Menu hors connexion -->
+                <a href="{{ path('home') }}" class="{{ currentRoute == 'home' ? 'active' : '' }}">Accueil</a>
+                <a href="{{ path('app_login') }}" class="{{ currentRoute == 'app_login' ? 'active' : '' }}">Se connecter</a>
+                <a href="{{ path('app_register') }}" class="{{ currentRoute == 'app_register' ? 'active' : '' }}">S’inscrire</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <!-- CONTENU PRINCIPAL -->
+    <main>
         {% block body %}{% endblock %}
-    </body>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <p>Email : <a href="mailto:stubborn@blabla.com">stubborn@blabla.com</a></p>
+                <p>Adresse : Piccadilly Circus, London W1J 0DA, Royaume-Uni</p>
+            </div>
+        </div>
+
+        <!-- Copyright centré -->
+        <div class="footer-bottom">
+            &copy; {{ "now"|date("Y") }} Stubborn. Tous droits réservés.
+        </div>
+    </footer>
+
+    <style>
+        nav a {
+            margin-right: 15px;
+            text-decoration: none;
+            color: black;
+        }
+        nav a.active {
+            font-weight: bold;
+            text-decoration: underline;
+        }
+        .featured-products {
+            display: flex;
+            gap: 20px;
+        }
+        .product-card {
+            border: 1px solid #ccc;
+            padding: 10px;
+            width: 200px;
+        }
+        .product-card img {
+            width: 100%;
+            height: auto;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 30px 20px;
+            margin-top: 50px;
+            font-size: 0.9em;
+        }
+
+        .footer-container {
+            display: flex;
+            justify-content: center; /* centrer la section contact */
+            flex-wrap: wrap;
+            max-width: 1000px;
+            margin: 0 auto 20px auto;
+        }
+
+        .footer-section {
+            margin-bottom: 20px;
+            text-align: center; /* centrer le contenu de la section contact */
+        }
+
+        .footer-section h3 {
+            margin-bottom: 10px;
+        }
+
+        .footer-section a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .footer-section a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            border-top: 1px solid #555;
+            padding-top: 10px;
+            margin-top: 10px;
+            color: #ccc;
+        }
+    </style>
+
+</body>
 </html>

@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil - Stubborn{% endblock %}
+
+{% block body %}
+
+<h1>Bienvenue chez Stubborn</h1>
+
+<!-- Produits mis en avant -->
+<section class="featured-products">
+    <h2>Produits mis en avant</h2>
+    <div class="products-grid">
+        {% for product in featuredProducts %}
+            <div class="product-card">
+                <img src="{{ asset(product.image) }}" alt="{{ product.name }}">
+                <h3>{{ product.name }}</h3>
+                <p>{{ product.price }} €</p>
+
+                {% if app.user %}
+                    <a href="{{ path('product_show', {'id': product.id}) }}">Voir</a>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
+<hr>
+
+<!-- Présentation société -->
+<section class="company-info">
+    <h2>À propos de Stubborn</h2>
+    <p>Jeune, dynamique et fiers de nos créations, nous allions confort, design et durabilité pour que chaque pièce vous accompagne au quotidien.</p>
+    <p><strong>Ne compromettez jamais votre look : choisissez Stubborn.</strong></p>
+
+</section>
+
+<style>
+    .products-grid {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-bottom: 30px;
+    }
+
+    .product-card {
+        border: 1px solid #ccc;
+        padding: 10px;
+        width: 200px;
+        text-align: center;
+    }
+
+    .product-card img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
+
+    .product-card a {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 5px 10px;
+        background-color: #333;
+        color: #fff;
+        text-decoration: none;
+    }
+
+    .product-card a:hover {
+        background-color: #555;
+    }
+
+    .company-info {
+        font-size: 1.1em;
+        margin-top: 30px;
+    }
+
+    .company-info h2 {
+        margin-bottom: 10px;
+    }
+</style>
+
+{% endblock %}
