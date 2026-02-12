@@ -1,28 +1,139 @@
 {# templates/security/register.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block title %}Inscription{% endblock %}
+{% block title %}S'inscrire{% endblock %}
 
 {% block body %}
-{% for label, messages in app.flashes %}
-    {% for message in messages %}
-        <div class="flash {{ label }}">{{ message }}</div>
-    {% endfor %}
-{% endfor %}
+<div class="register-wrapper">
+    <div class="register-box">
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="flash {{ label }}">{{ message }}</div>
+            {% endfor %}
+        {% endfor %}
 
-<h1>Créer un compte</h1>
+        <h1>S'inscrire</h1>
+        <hr class="separator">
 
-{{ form_start(registrationForm) }}
+        {{ form_start(registrationForm) }}
 
-    {{ form_row(registrationForm.name) }}
-    {{ form_row(registrationForm.email) }}
-    {{ form_row(registrationForm.plainPassword.first) }}
-    {{ form_row(registrationForm.plainPassword.second) }}
+            <label for="name">Nom d'utilisateur :</label>
+            {{ form_widget(registrationForm.name, {'attr': {'placeholder': 'ex: johndoe'}}) }}
 
-    <button type="submit">S'inscrire</button>
+            <label for="email">Adresse email :</label>
+            {{ form_widget(registrationForm.email, {'attr': {'placeholder': 'ex: johndoe@gmail.com'}}) }}
 
-{{ form_end(registrationForm) }}
+            <label for="deliveryAddress">Adresse de livraison :</label>
+            {{ form_widget(registrationForm.deliveryAddress, {'attr': {'placeholder': 'ex: 8 Rue du Bac, 54100 Nancy'}}) }}
 
-<p>Déjà inscrit ? <a href="{{ path('app_login') }}">Se connecter</a></p>
-<p><a href="{{ path('home') }}">Retour à l'accueil</a></p>
+            <label for="plainPassword">Mot de passe :</label>
+            {{ form_widget(registrationForm.plainPassword.first, {'attr': {'placeholder': '••••••••'}}) }}
+
+            <label for="plainPassword_confirm">Confirmer le mot de passe :</label>
+            {{ form_widget(registrationForm.plainPassword.second, {'attr': {'placeholder': '••••••••'}}) }}
+
+            <button type="submit" class="btn-register">Créer un compte</button>
+
+        {{ form_end(registrationForm) }}
+
+        <hr class="separator">
+        <p>Déjà inscrit ?</p>
+        <a href="{{ path('app_login') }}" class="btn-login">Se connecter</a>
+    </div>
+</div>
+
+<style>
+/* Wrapper centré */
+.register-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+}
+
+/* Encadré */
+.register-box {
+    width: 400px;
+    padding: 30px 40px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* Titres et séparateurs */
+.register-box h1 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.register-box hr.separator {
+    margin: 20px 0;
+    border: none;
+    border-top: 2px solid #eee;
+}
+
+/* Champs du formulaire */
+.register-box label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+.register-box input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 0.95em;
+}
+
+/* Boutons */
+.btn-register {
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    background-color: #007BFF;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.btn-register:hover {
+    background-color: #0056b3;
+}
+
+.btn-login {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background-color: #007BFF;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.btn-login:hover {
+    background-color: #0056b3;
+}
+
+/* Flash messages */
+.flash {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.flash.success { background-color: #d4edda; color: #155724; }
+.flash.error { background-color: #f8d7da; color: #721c24; }
+</style>
 {% endblock %}
