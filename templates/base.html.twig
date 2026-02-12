@@ -1,83 +1,89 @@
+{# templates/base.html.twig #}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Stubborn{% endblock %}</title>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-</head>
-<body>
-
-    <!-- HEADER / MENU -->
-    <header style="display:flex; justify-content:space-between; align-items:center; padding:10px 20px; background:#f5f5f5;">
-        <!-- Logo et slogan à gauche -->
-        <div class="logo-slogan" style="display:flex; flex-direction:column; align-items:flex-start;">
-            <a href="{{ path('home') }}">
-                <img src="{{ asset('/images/logo/Logo.png') }}" alt="Stubborn Logo" style="height:50px;">
-            </a>
-            <span style="font-size:0.9em; color:#555;">Don't compromise on your look</span>
-        </div>
-
-        <nav>
-            {% if app.user %}
-                <!-- Menu connecté -->
-                <a href="{{ path('home') }}" class="{{ currentRoute == 'home' ? 'active' : '' }}">Accueil</a>
-                <a href="{{ path('products') }}" class="{{ currentRoute == 'products' ? 'active' : '' }}">Boutique</a>
-                <a href="{{ path('cart') }}" class="{{ currentRoute == 'cart' ? 'active' : '' }}">Panier</a>
-                <a href="{{ path('app_logout') }}">Se déconnecter</a>
-            {% else %}
-                <!-- Menu hors connexion -->
-                <a href="{{ path('home') }}" class="{{ currentRoute == 'home' ? 'active' : '' }}">Accueil</a>
-                <a href="{{ path('app_login') }}" class="{{ currentRoute == 'app_login' ? 'active' : '' }}">Se connecter</a>
-                <a href="{{ path('app_register') }}" class="{{ currentRoute == 'app_register' ? 'active' : '' }}">S’inscrire</a>
-            {% endif %}
-        </nav>
-    </header>
-
-    <!-- CONTENU PRINCIPAL -->
-    <main>
-        {% block body %}{% endblock %}
-    </main>
-
-    <!-- FOOTER -->
-    <footer>
-        <div class="footer-container">
-            <div class="footer-section">
-                <h3>Contact</h3>
-                <p>Email : <a href="mailto:stubborn@blabla.com">stubborn@blabla.com</a></p>
-                <p>Adresse : Piccadilly Circus, London W1J 0DA, Royaume-Uni</p>
-            </div>
-        </div>
-
-        <!-- Copyright centré -->
-        <div class="footer-bottom">
-            &copy; {{ "now"|date("Y") }} Stubborn. Tous droits réservés.
-        </div>
-    </footer>
 
     <style>
-        nav a {
-            margin-right: 15px;
-            text-decoration: none;
-            color: black;
+        /* --- Header --- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background-color: #f5f5f5;
+            position: relative;
         }
+
+        .logo-slogan {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-slogan img {
+            height: 50px;
+        }
+
+        .logo-slogan p {
+            margin: 5px 0 0 0;
+            font-style: italic;
+            font-size: 0.9em;
+        }
+
+        nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+        }
+
         nav a.active {
             font-weight: bold;
             text-decoration: underline;
         }
-        .featured-products {
-            display: flex;
-            gap: 20px;
-        }
-        .product-card {
-            border: 1px solid #ccc;
-            padding: 10px;
-            width: 200px;
-        }
-        .product-card img {
-            width: 100%;
-            height: auto;
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
         }
 
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background-color: #333;
+            margin: 4px 0;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                display: none;
+                flex-direction: column;
+                background: #f5f5f5;
+                position: absolute;
+                top: 70px;
+                right: 0;
+                width: 200px;
+                padding: 15px;
+                border: 1px solid #ccc;
+            }
+
+            nav.show {
+                display: flex;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+        }
+
+        /* --- Footer --- */
         footer {
             background-color: #333;
             color: #fff;
@@ -88,7 +94,7 @@
 
         .footer-container {
             display: flex;
-            justify-content: center; /* centrer la section contact */
+            justify-content: center;
             flex-wrap: wrap;
             max-width: 1000px;
             margin: 0 auto 20px auto;
@@ -96,7 +102,7 @@
 
         .footer-section {
             margin-bottom: 20px;
-            text-align: center; /* centrer le contenu de la section contact */
+            text-align: center;
         }
 
         .footer-section h3 {
@@ -120,6 +126,64 @@
             color: #ccc;
         }
     </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggle = document.querySelector('.menu-toggle');
+            const nav = document.querySelector('nav');
+            toggle?.addEventListener('click', () => {
+                nav.classList.toggle('show');
+            });
+        });
+    </script>
+</head>
+<body>
+
+<header>
+    <div class="logo-slogan">
+        <a href="{{ path('home') }}">
+            <img src="{{ asset('/images/logo/Logo.png') }}" alt="Stubborn Logo">
+        </a>
+        <p>Don't compromise on your look !</p>
+    </div>
+
+    <div class="menu-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    {% set currentRoute = app.request.attributes.get('_route') %}
+    <nav>
+        {% if app.user %}
+            <a href="{{ path('home') }}" class="{{ currentRoute == 'home' ? 'active' : '' }}">Accueil</a>
+            <a href="{{ path('products') }}" class="{{ currentRoute == 'products' ? 'active' : '' }}">Boutique</a>
+            <a href="{{ path('cart') }}" class="{{ currentRoute == 'cart' ? 'active' : '' }}">Panier</a>
+            <a href="{{ path('app_logout') }}">Se déconnecter</a>
+        {% else %}
+            <a href="{{ path('home') }}" class="{{ currentRoute == 'home' ? 'active' : '' }}">Accueil</a>
+            <a href="{{ path('app_login') }}" class="{{ currentRoute == 'app_login' ? 'active' : '' }}">Se connecter</a>
+            <a href="{{ path('app_register') }}" class="{{ currentRoute == 'app_register' ? 'active' : '' }}">S’inscrire</a>
+        {% endif %}
+    </nav>
+</header>
+
+<main>
+    {% block body %}{% endblock %}
+</main>
+
+<footer>
+    <div class="footer-container">
+        <div class="footer-section">
+            <h3>Contact</h3>
+            <p>Email : <a href="mailto:stubborn@blabla.com">stubborn@blabla.com</a></p>
+            <p>Adresse : Piccadilly Circus, London W1J 0DA, Royaume-Uni</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        &copy; {{ "now"|date("Y") }} Stubborn. Tous droits réservés.
+    </div>
+</footer>
 
 </body>
 </html>
