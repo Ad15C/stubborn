@@ -23,6 +23,13 @@ class SecurityController extends AbstractController
         ]);
     }
 
+    #[Route('/forgot-password', name: 'app_forgot_password')]
+    public function forgotPassword(Request $request): Response
+    {
+        // Ici tu pourras mettre la logique pour demander l'email et envoyer un lien de réinitialisation
+        return $this->render('security/forgot_password.html.twig');
+    }
+
     #[Route('/logout', name: 'app_logout')]
     public function logout(): void
     {
