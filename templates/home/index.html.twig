@@ -4,42 +4,39 @@
 
 {% block body %}
 
-<h1>Bienvenue chez Stubborn</h1>
+<!-- Titre centré -->
+<h1 style="text-align:center; margin-bottom:40px;">Bienvenue chez Stubborn</h1>
 
 <!-- Produits mis en avant -->
 <section class="featured-products">
-    <h2>Produits mis en avant</h2>
-    <div class="products-grid">
-        {% for product in featuredProducts %}
-            <div class="product-card">
-                <img src="{{ asset(product.image) }}" alt="{{ product.name }}">
-                <h3>{{ product.name }}</h3>
-                <p>{{ product.price }} €</p>
-
-                {% if app.user %}
-                    <a href="{{ path('product_show', {'id': product.id}) }}">Voir</a>
-                {% endif %}
-            </div>
-        {% endfor %}
-    </div>
+    {% for product in featuredProducts %}
+        <div class="product-card">
+            <img src="{{ asset(product.image) }}" alt="{{ product.name }}">
+            <h3> Nom: {{ product.name }}</h3>
+            <p>Prix: {{ product.price|number_format(2, '.', ',') }} €</p>
+            {% if app.user %}
+                <a href="{{ path('product_show', {'id': product.id}) }}">Voir</a>
+            {% endif %}
+        </div>
+    {% endfor %}
 </section>
 
 <hr>
 
 <!-- Présentation société -->
 <section class="company-info">
-    <h2>À propos de Stubborn</h2>
-    <p>Jeune, dynamique et fiers de nos créations, nous allions confort, design et durabilité pour que chaque pièce vous accompagne au quotidien.</p>
-    <p><strong>Ne compromettez jamais votre look : choisissez Stubborn.</strong></p>
-
+    <h2 style="text-align:center;">À propos de Stubborn</h2>
+    <p style="text-align: left;">Jeune, dynamique et fiers de nos créations, nous allions confort, design et durabilité pour que chaque pièce vous accompagne au quotidien.</p>
+    <p style="text-align:left;"><strong>Ne compromettez jamais votre look : choisissez Stubborn.</strong></p>
 </section>
 
 <style>
-    .products-grid {
+    .featured-products {
         display: flex;
+        justify-content: center;
         gap: 20px;
         flex-wrap: wrap;
-        margin-bottom: 30px;
+        margin-bottom: 40px;
     }
 
     .product-card {
@@ -71,10 +68,6 @@
     .company-info {
         font-size: 1.1em;
         margin-top: 30px;
-    }
-
-    .company-info h2 {
-        margin-bottom: 10px;
     }
 </style>
 
