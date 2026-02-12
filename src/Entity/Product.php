@@ -26,6 +26,9 @@ class Product
     #[ORM\Column(type: "boolean")]
     private bool $isFeatured = false;
 
+    #[ORM\Column(type: "integer", nullable: true)]
+    private ?int $featuredRank = null;
+
     #[ORM\Column(type: "integer")]
     private int $stockXS = 2;
 
@@ -92,6 +95,16 @@ class Product
         return $this;
     }
 
+    public function getFeaturedRank(): ?int
+    {
+        return $this->featuredRank;
+    }
+
+    public function setFeaturedRank(?int $featuredRank): static
+    {
+        $this->featuredRank = $featuredRank;
+        return $this;
+    }
     public function getStockXS(): int
     {
         return $this->stockXS;
