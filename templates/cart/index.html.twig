@@ -1,20 +1,200 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello CartController!{% endblock %}
+{% block title %}Mon Panier{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<div class="cart-wrapper">
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <h1>Mon panier</h1>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>/home/addie_c/projects/stubborn/src/Controller/CartController.php</code></li>
-        <li>Your template at <code>/home/addie_c/projects/stubborn/templates/cart/index.html.twig</code></li>
-    </ul>
+    {% if products is empty %}
+        <p>Votre panier est vide.</p>
+        <p><a href="{{ path('app_products') }}">← Retour à la liste des produits</a></p>
+    {% else %}
+        <!-- Grand container invisible -->
+        <div class="cart-container">
+
+            {% for product in products %}
+                <!-- Encadré individuel pour chaque produit -->
+                <div class="cart-item">
+                    <div class="item-column item-image">
+                        <img src="{{ asset(product.image|default('images/products/default.jpeg')) }}" alt="{{ product.name }}">
+                    </div>
+                    <div class="item-column item-name">
+                        {{ product.name }}
+                    </div>
+                    <div class="item-column item-price">
+                        {{ product.price }} €
+                    </div>
+                    <div class="item-column item-size">
+                        {{ product.size }}
+                    </div>
+                    <div class="item-actions">
+                        <a href="{{ path('cart_remove', {index: loop.index0}) }}" class="btn-remove">Retirer</a>
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+
+        <!-- Bloc total et boutons -->
+        <div class="cart-summary">
+            <div class="total-box">
+                <strong>Total : </strong> {{ total }} €
+            </div>
+            <div class="summary-buttons">
+                <a href="#" class="btn-checkout">Finaliser ma commande</a>
+                <a href="{{ path('app_products') }}" class="btn-continue">Continuer mes achats</a>
+            </div>
+        </div>
+    {% endif %}
+
 </div>
+
+<style>
+.cart-wrapper {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.cart-wrapper h1 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* Grand container : pas de bordure */
+.cart-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Encadré individuel produit */
+.cart-item {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 15px;
+    align-items: center;
+    position: relative;
+}
+
+/* Colonnes produit */
+.item-column {
+    flex: 1;
+    min-width: 100px;
+    text-align: center;
+}
+
+.item-image img {
+    max-width: 100px;
+    max-height: 100px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+/* Bouton retirer en bas à droite de l'encadrement */
+.item-actions {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+.btn-remove {
+    padding: 5px 10px;
+    background-color: #dc3545;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 0.9em;
+}
+
+.btn-remove:hover {
+    background-color: #a71d2a;
+}
+
+/* Bloc Total + boutons */
+.cart-summary {
+    display: flex;
+    justify-content: flex-end;
+    gap: 20px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+.total-box {
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    min-width: 150px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.summary-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.btn-checkout, .btn-continue {
+    padding: 12px 25px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    text-align: center;
+}
+
+.btn-checkout {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-checkout:hover {
+    background-color: #218838;
+}
+
+.btn-continue {
+    background-color: #007BFF;
+    color: white;
+}
+
+.btn-continue:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .cart-item {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10px;
+    }
+
+    .item-column {
+        text-align: left;
+    }
+
+    .item-actions {
+        position: static;
+        margin-top: 10px;
+    }
+
+    .cart-summary {
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+    .summary-buttons {
+        width: 100%;
+    }
+
+    .btn-checkout, .btn-continue {
+        width: 100%;
+    }
+}
+</style>
 {% endblock %}
