@@ -3,129 +3,123 @@
 {% block title %}Produits{% endblock %}
 
 {% block body %}
-<h1>Nos produits</h1>
-<hr class="separator">
+<div class="page-container">
+    <h1 style="text-align:center; margin-bottom:40px;">Nos produits</h1>
+    <hr class="separator">
 
-<div class="products-page">
-    {# Sidebar filtre #}
-    <aside class="products-sidebar">
-        <h2>Filtrer par prix</h2>
-        <div class="price-filter">
-            <a href="{{ path('app_products', {'min': 10, 'max': 29}) }}">10 à 29 €</a>
-            <a href="{{ path('app_products', {'min': 30, 'max': 35}) }}">30 à 35 €</a>
-            <a href="{{ path('app_products', {'min': 35, 'max': 50}) }}">35 à 50 €</a>
-        </div>
-    </aside>
+    <div class="products-page">
 
-    {# Contenu produits #}
-    <div class="products-grid">
-        {% for product in products %}
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="{{ asset(product.image) }}" 
-                        alt="{{ product.name }}" 
+        <!-- Grille des produits -->
+        <div class="products-grid">
+
+            {# Filtre comme premier élément de la grille #}
+            <div class="filter-box">
+                <h2>Fourchette des prix :</h2>
+                <a href="{{ path('app_products', {'min': 10, 'max': 29}) }}">10 à 29 €</a>
+                <a href="{{ path('app_products', {'min': 30, 'max': 35}) }}">30 à 35 €</a>
+                <a href="{{ path('app_products', {'min': 35, 'max': 50}) }}">35 à 50 €</a>
+            </div>
+
+            {% for product in products %}
+                <div class="product-card">
+                    <img src="{{ asset(product.image) }}" alt="{{ product.name }}"
                         onerror="this.onerror=null;this.src='{{ asset('images/products/default.jpeg') }}';">
-                </div>
-                <div class="product-info">
-                    <h2>{{ product.name }}</h2>
-                    <p class="price">{{ product.price }} €</p>
-                </div>
-                <div class="product-actions">
+                    <h3>Nom: {{ product.name }}</h3>
+                    <p> Prix :{{ product.price }} €</p>
                     <a href="{{ path('product_show', {'id': product.id}) }}" class="btn-view">Voir</a>
                 </div>
-            </div>
-        {% else %}
-            <p>Aucun produit disponible pour le moment.</p>
-        {% endfor %}
-            </div>
+            {% else %}
+                <p>Aucun produit disponible pour le moment.</p>
+            {% endfor %}
+
+        </div>
     </div>
 
-    <p><a href="{{ path('home') }}">Retour à l'accueil</a></p>
-{% endblock %}
+    <p style="text-align:center; margin-top:30px;"><a href="{{ path('home') }}">Retour à l'accueil</a></p>
+</div>
 
-{% block stylesheets %}
 <style>
-.products-page {
-    display: flex;
+/* Conteneur principal centré */
+.page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Grille principale */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 colonnes max */
     gap: 20px;
-    margin-top: 20px;
 }
 
-/* Sidebar */
-.products-sidebar {
-    flex: 0 0 200px;
-    padding: 15px;
-    border: 1px solid #ccc;
+/* Filtre prend la 1ère cellule de la première ligne */
+.filter-box {
+    grid-column: 1; /* colonne fixe */
+    width: 150px;              /* largeur réduite */
+    max-height: 250px;          /* hauteur maximale */
+    border: 2px solid #ccc;
     border-radius: 10px;
+    padding: 10px;             /* moins de padding pour réduire la hauteur */
     background-color: #f9f9f9;
-    height: fit-content;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;                  /* réduire l'espace entre les liens */
 }
 
-.products-sidebar h2 {
-    font-size: 1.1em;
+.filter-box h2 {
+    font-size: 1em;             /* titre plus petit */
     margin-bottom: 10px;
-    text-align: center;
 }
 
-.products-sidebar .price-filter a {
+.filter-box a {
     display: block;
-    margin-bottom: 8px;
-    padding: 8px;
-    background-color: #007BFF;
-    color: #fff;
+    padding: 6px;               /* liens plus petits pour réduire la hauteur */
     text-decoration: none;
+    color: #fff;
+    background-color: #007BFF;
     border-radius: 5px;
-    text-align: center;
     font-weight: bold;
+    font-size: 0.9em;           /* texte des liens plus petit */
 }
 
-.products-sidebar .price-filter a:hover {
+.filter-box a:hover {
     background-color: #0056b3;
 }
 
-/* Produits */
-.products-grid {
-    flex: 1;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-}
-
+/* Carte produit */
 .product-card {
-    border: 1px solid #ccc;
+    border: 2px solid #ccc;
     border-radius: 10px;
-    padding: 15px;
     background-color: #fff;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    padding: 15px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    min-height: 320px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-.product-image img {
+.product-card img {
     width: 100%;
     height: auto;
     border-radius: 5px;
+    margin-bottom: 10px;
 }
 
-.product-info h2 {
-    font-size: 1.1em;
+.product-card h3 {
     margin: 10px 0 5px;
     text-align: center;
 }
 
-.product-info .price {
-    font-weight: bold;
+.product-card p {
     text-align: center;
+    font-weight: bold;
     margin-bottom: 10px;
 }
 
-.product-actions {
-    display: flex;
-    justify-content: flex-end;
-}
-
-.btn-view {
+.product-card .btn-view {
+    margin-left: auto;
     padding: 8px 12px;
     background-color: #007BFF;
     color: #fff;
@@ -134,29 +128,20 @@
     border-radius: 5px;
 }
 
-.btn-view:hover {
+.product-card .btn-view:hover {
     background-color: #0056b3;
 }
 
-.separator {
-    border: none;
-    border-top: 2px solid #eee;
-    margin: 20px 0;
+/* Responsive */
+@media (max-width: 1024px) {
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 colonnes */
+    }
 }
 
-/* === Responsive === */
-@media screen and (max-width: 768px) {
-    .products-page {
-        flex-direction: column;
-    }
-
-    .products-sidebar {
-        width: 100%;
-        margin-bottom: 20px;
-    }
-
+@media (max-width: 768px) {
     .products-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr; /* 1 colonne */
     }
 }
 </style>
