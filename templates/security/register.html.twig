@@ -18,19 +18,49 @@
         {{ form_start(registrationForm) }}
 
             <label for="name">Nom d'utilisateur :</label>
-            {{ form_widget(registrationForm.name, {'attr': {'placeholder': 'ex: johndoe'}}) }}
+            {{ form_widget(registrationForm.name, {
+                'attr': {
+                    'placeholder': 'ex: johndoe', 
+                    'autocomplete': 'username'
+                    }
+                })
+            }}
 
             <label for="email">Adresse email :</label>
-            {{ form_widget(registrationForm.email, {'attr': {'placeholder': 'ex: johndoe@gmail.com'}}) }}
+            {{ form_widget(registrationForm.email, {
+                'attr': {
+                    'placeholder': 'ex: johndoe@gmail.com',
+                    'autocomplete': 'email'
+                    }
+                }) 
+            }}
 
             <label for="deliveryAddress">Adresse de livraison :</label>
-            {{ form_widget(registrationForm.deliveryAddress, {'attr': {'placeholder': 'ex: 8 Rue du Bac, 54100 Nancy'}}) }}
+            {{ form_widget(registrationForm.deliveryAddress, {
+                'attr': {
+                    'placeholder': 'ex: 8 Rue du Bac, 54100 Nancy',
+                    'autocomplete': 'street-address'
+                    }
+                }) 
+            }}
 
             <label for="plainPassword">Mot de passe :</label>
-            {{ form_widget(registrationForm.plainPassword.first, {'attr': {'placeholder': '••••••••'}}) }}
+            {{ form_widget(registrationForm.plainPassword.first, {
+                'attr': {
+                    'placeholder': '••••••••',
+                    'autocomplete': 'new-password'
+                    }
+                }) 
+            }}
 
             <label for="plainPassword_confirm">Confirmer le mot de passe :</label>
-            {{ form_widget(registrationForm.plainPassword.second, {'attr': {'placeholder': '••••••••'}}) }}
+            {{ form_widget(registrationForm.plainPassword.second, {
+                'attr': {
+                    'placeholder': '••••••••',
+                    'autocomplete': 'new-password'
+                    }
+                }) 
+            }}
 
             <button type="submit" class="btn-register">Créer un compte</button>
 

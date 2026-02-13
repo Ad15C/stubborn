@@ -96,4 +96,16 @@ class OrderItem
         $this->price = $price;
         return $this;
     }
+
+    public function getSize(): string
+    {
+        return $this->size;
+    }
+
+    public function setSize(string $size): static
+    {
+        $this->size = $size;
+        return $this;
+    }
+
 }
