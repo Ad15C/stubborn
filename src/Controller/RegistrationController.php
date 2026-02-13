@@ -45,7 +45,7 @@ class RegistrationController extends AbstractController
                 )
             );
 
-            // Attribuer le rôle client par défaut
+            // Rôle par défaut
             $user->setRoles(['ROLE_USER']);
 
             // Générer un token unique pour l'activation
@@ -56,23 +56,20 @@ class RegistrationController extends AbstractController
             $em->persist($user);
             $em->flush();
 
-            // --- DEV ONLY : forcer la vérification pour tester l’appli ---
-            if ($this->getParameter('kernel.environment') === 'dev') {
-                $user->setIsVerified(true);
-                $user->setVerificationToken(null);
-                $em->flush();
-            }
+            // Détecter si on est en dev
+            $isDev = $this->getParameter('kernel.environment') === 'dev';
 
             // Générer le lien d’activation
             $activationLink = $this->generateUrl('app_verify_email', [
                 'token' => $activationToken
             ], true);
 
-            // Préparer le mail – en dev, envoyer toujours à Mailtrap
-            $to = $this->getParameter('kernel.environment') === 'dev'
-                ? 'e9ed2e81d9-25808c+user1@inbox.mailtrap.io'
+            // Destinataire du mail
+            $to = $isDev
+                ? 'e9ed2e81d9-25808c+user1@inbox.mailtrap.io' // inbox Mailtrap
                 : $user->getEmail();
 
+            // Créer le mail
             $email = (new Email())
                 ->from('stubborn@blabla.com')
                 ->to($to)
@@ -85,11 +82,22 @@ class RegistrationController extends AbstractController
                     <p>Si vous n'avez pas créé de compte, ignorez cet email.</p>
                 ");
 
+            // Envoyer le mail
             try {
                 $mailer->send($email);
-                $this->addFlash('success', 'Un email de confirmation vous a été envoyé (Mailtrap en dev).');
+                $this->addFlash(
+                    'success',
+                    'Un email de confirmation vous a été envoyé' . ($isDev ? ' (Mailtrap en dev, compte activé automatiquement)' : '') . '.'
+                );
             } catch (\Exception $e) {
-                $this->addFlash('error', 'Impossible d\’envoyer l\’email : ' . $e->getMessage());
+                $this->addFlash('error', 'Impossible d’envoyer l’email : ' . $e->getMessage());
+            }
+
+            // --- DEV ONLY : forcer vérification pour tester login/panier ---
+            if ($isDev) {
+                $user->setIsVerified(true);
+                $user->setVerificationToken(null);
+                $em->flush();
             }
 
             return $this->redirectToRoute('app_login');
@@ -131,7 +139,7 @@ class RegistrationController extends AbstractController
             $mailer->send($email);
             return new Response('Mail envoyé !');
         } catch (\Exception $e) {
-            return new Response('Erreur lors de l\’envoi : ' . $e->getMessage());
+            return new Response('Erreur lors de l’envoi : ' . $e->getMessage());
         }
     }
 }

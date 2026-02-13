@@ -17,27 +17,27 @@
             {% for item in items %}
                 <div class="cart-item">
                     <div class="item-column item-image">
-                        <img src="{{ asset(item.getProduct().getImage()|default('images/products/default.jpeg')) }}" alt="{{ item.getProductName() }}">
+                        <img src="{{ asset(item.getProduct().getImage()|default('images/products/default.jpeg')) }}"
+                            alt="{{ item.getProduct().getName() }}">
                     </div>
                     <div class="item-column item-name">
-                        {{ item.getProductName() }}
+                        {{ item.getProduct().getName() }}
                     </div>
                     <div class="item-column item-size">
-                        Taille : {{ item.getSize() }}
+                        {{ item.getSize() }}
                     </div>
                     <div class="item-column item-quantity">
-                        Quantité : {{ item.getQuantity() }}
+                        {{ item.getQuantity() }}
                     </div>
                     <div class="item-column item-price">
-                        Prix unitaire : {{ item.getPrice() }} €
+                        {{ item.getPrice() }} €
                     </div>
-                    <div class="item-column item-total">
-                        Total : {{ (item.getPrice() * item.getQuantity())|number_format(2, ',', ' ') }} €
-                    </div>
-                    <div class="item-actions">
-                        <a href="{{ path('cart_remove', {id: item.getId()}) }}" class="btn-remove">Retirer</a>
+                    <div class="item-column item-remove">
+                        <a href="{{ path('cart_remove', {'id': item.getId()}) }}">Supprimer</a>
                     </div>
                 </div>
+            {% else %}
+                <p>Votre panier est vide.</p>
             {% endfor %}
 
         </div>
