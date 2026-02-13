@@ -43,14 +43,12 @@ class CartController extends AbstractController
             throw $this->createNotFoundException('Produit introuvable');
         }
 
-        // Récupérer ou créer le panier utilisateur
         $cart = $cartRepository->findOneBy(['user' => $user]);
         if (!$cart) {
             $cart = new Cart();
             $cart->setUser($user);
         }
 
-        // Vérifier si le produit avec la même taille existe déjà
         $existingItem = null;
         foreach ($cart->getItems() as $item) {
             if ($item->getProduct() === $product && $item->getSize() === $size) {
@@ -62,7 +60,6 @@ class CartController extends AbstractController
         if ($existingItem) {
             $existingItem->setQuantity($existingItem->getQuantity() + 1);
         } else {
-            // Créer un nouveau CartItem
             $cartItem = new CartItem();
             $cartItem->setProduct($product);
             $cartItem->setPrice($product->getPrice());
@@ -144,7 +141,8 @@ class CartController extends AbstractController
         }
 
         $cart = $cartRepository->findOneBy(['user' => $user]);
-        if (!$cart || count($cart->getItems()) === 0) {
+        if (!$cart || $cart->getItems()->isEmpty()) {
+            $this->addFlash('error', 'Votre panier est vide.');
             return $this->redirectToRoute('cart_show');
         }
 
@@ -152,8 +150,10 @@ class CartController extends AbstractController
         $order = new Order();
         $order->setUser($user);
         $order->setStatus(Order::STATUS_PENDING);
-        $total = 0;
+        $em->persist($order);
+        $em->flush(); // flush pour générer l'ID
 
+        $total = 0;
         foreach ($cart->getItems() as $cartItem) {
             $orderItem = new OrderItem();
             $orderItem->setProduct($cartItem->getProduct());
@@ -161,25 +161,26 @@ class CartController extends AbstractController
             $orderItem->setPrice($cartItem->getPrice());
             $orderItem->setQuantity($cartItem->getQuantity());
             $orderItem->setSize($cartItem->getSize());
-            $order->addItem($orderItem);
+            $orderItem->setOrder($order);
+
+            $em->persist($orderItem);
 
             $total += $cartItem->getPrice() * $cartItem->getQuantity();
         }
 
         $order->setTotal($total);
-        $em->persist($order);
         $em->flush();
 
         // Stripe
         Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
         $checkoutSession = StripeSession::create([
             'payment_method_types' => ['card'],
-            'line_items' => array_map(function($item) {
+            'line_items' => array_map(function(CartItem $item) {
                 return [
                     'price_data' => [
                         'currency' => 'eur',
                         'product_data' => [
-                            'name' => $item->getProductName() . ' - Taille ' . $item->getSize(),
+                            'name' => $item->getProduct()->getName() . ' - Taille ' . $item->getSize(),
                         ],
                         'unit_amount' => $item->getPrice() * 100,
                     ],

@@ -21,10 +21,24 @@
     
         <form method="post" action="{{ path('app_login') }}">
             <label for="username">Nom d'utilisateur :</label>
-            <input type="text" id="username" name="_username" value="{{ last_username }}" placeholder="ex: johndoe@gmail.com" required>
+            <input 
+                type="email" 
+                id="username" 
+                name="_username" 
+                value="{{ last_username }}" 
+                placeholder="ex: johndoe@gmail.com" 
+                required 
+                autocomplete="new-username"
+            >
 
             <label for="password">Mot de passe :</label>
-            <input type="password" id="password" name="_password" placeholder="••••••••" required>
+            <input 
+                type="password" 
+                id="password" 
+                name="_password" 
+                placeholder="••••••••" 
+                required
+            >
 
                         <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 

@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
+#[ORM\Table(name: '`orders`')]
 class Order
 {
     #[ORM\Id]
@@ -25,8 +26,8 @@ class Order
     #[ORM\Column(length: 50)]
     private string $status = self::STATUS_PENDING;
 
-    #[ORM\Column(type: 'datetime')]
-    private \DateTimeInterface $createdAt;
+    #[ORM\Column(type: 'datetimetz_immutable')]
+    private \DateTimeImmutable $createdAt;
 
     #[ORM\OneToMany(mappedBy: 'order', targetEntity: OrderItem::class, cascade: ['persist', 'remove'])]
     private Collection $items;
@@ -86,10 +87,11 @@ class Order
         return $this;
     }
 
-    public function getCreatedAt(): \DateTimeInterface
+    public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
     }
+
 
     /**
      * @return Collection|OrderItem[]
