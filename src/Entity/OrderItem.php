@@ -18,8 +18,12 @@ class OrderItem
     private ?Order $order = null;
 
     #[ORM\ManyToOne(targetEntity: Product::class)]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)] // nullable si produit supprimé
     private ?Product $product = null;
+
+    // Snapshot du nom
+    #[ORM\Column(length: 255)]
+    private string $productName;
 
     #[ORM\Column]
     private int $quantity = 1;
@@ -27,8 +31,12 @@ class OrderItem
     #[ORM\Column(type: 'decimal', precision: 8, scale: 2)]
     private float $price;
 
-        // Getters & Setters //
-        
+    #[ORM\Column(length: 10)]
+    private string $size;
+
+    // Getters & Setters //
+   
+
     public function getId(): ?int
     {
         return $this->id;
@@ -53,6 +61,17 @@ class OrderItem
     public function setProduct(?Product $product): static
     {
         $this->product = $product;
+        return $this;
+    }
+
+    public function getProductName(): string
+    {
+        return $this->productName;
+    }
+
+    public function setProductName(string $productName): static
+    {
+        $this->productName = $productName;
         return $this;
     }
 

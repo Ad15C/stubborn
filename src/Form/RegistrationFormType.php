@@ -40,13 +40,9 @@ class RegistrationFormType extends AbstractType
         ])
         ->add('deliveryAddress', TextType::class, [
             'label' => 'Adresse de livraison',
-            'required' => false, // facultatif
-            'attr' => [
-                'placeholder' => 'ex: 8 Rue du Bac, 54100 Nancy'
-            ]
-        ])
-    ;
-
+            'required' => false,
+            'attr' => ['placeholder' => 'ex: 8 Rue du Bac, 54100 Nancy']
+        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

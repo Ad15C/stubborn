@@ -7,43 +7,50 @@
 
     <h1>Mon panier</h1>
 
-    {% if products is empty %}
+    {% if items is empty %}
         <p>Votre panier est vide.</p>
         <p><a href="{{ path('app_products') }}">← Retour à la liste des produits</a></p>
     {% else %}
-        <!-- Grand container invisible -->
+        <!-- Container principal -->
         <div class="cart-container">
 
-            {% for product in products %}
-                <!-- Encadré individuel pour chaque produit -->
+            {% for item in items %}
                 <div class="cart-item">
                     <div class="item-column item-image">
-                        <img src="{{ asset(product.image|default('images/products/default.jpeg')) }}" alt="{{ product.name }}">
+                        <img src="{{ asset(item.getProduct().getImage()|default('images/products/default.jpeg')) }}" alt="{{ item.getProductName() }}">
                     </div>
                     <div class="item-column item-name">
-                        {{ product.name }}
-                    </div>
-                    <div class="item-column item-price">
-                        {{ product.price }} €
+                        {{ item.getProductName() }}
                     </div>
                     <div class="item-column item-size">
-                        {{ product.size }}
+                        Taille : {{ item.getSize() }}
+                    </div>
+                    <div class="item-column item-quantity">
+                        Quantité : {{ item.getQuantity() }}
+                    </div>
+                    <div class="item-column item-price">
+                        Prix unitaire : {{ item.getPrice() }} €
+                    </div>
+                    <div class="item-column item-total">
+                        Total : {{ (item.getPrice() * item.getQuantity())|number_format(2, ',', ' ') }} €
                     </div>
                     <div class="item-actions">
-                        <a href="{{ path('cart_remove', {index: loop.index0}) }}" class="btn-remove">Retirer</a>
+                        <a href="{{ path('cart_remove', {id: item.getId()}) }}" class="btn-remove">Retirer</a>
                     </div>
                 </div>
             {% endfor %}
 
         </div>
 
-        <!-- Bloc total et boutons -->
+        <!-- Bloc total général et boutons -->
         <div class="cart-summary">
             <div class="total-box">
-                <strong>Total : </strong> {{ total }} €
+                <strong>Total panier : </strong> {{ total|number_format(2, ',', ' ') }} €
             </div>
             <div class="summary-buttons">
-                <a href="#" class="btn-checkout">Finaliser ma commande</a>
+                <form action="{{ path('checkout') }}" method="post">
+                    <button type="submit" class="btn-checkout">Finaliser ma commande</button>
+                </form>
                 <a href="{{ path('app_products') }}" class="btn-continue">Continuer mes achats</a>
             </div>
         </div>
@@ -63,7 +70,7 @@
     margin-bottom: 30px;
 }
 
-/* Grand container : pas de bordure */
+/* Container principal */
 .cart-container {
     display: flex;
     flex-direction: column;
@@ -129,7 +136,7 @@
     padding: 15px;
     border: 1px solid #ccc;
     border-radius: 10px;
-    min-width: 150px;
+    min-width: 180px;
     text-align: center;
     font-weight: bold;
 }
@@ -146,6 +153,8 @@
     text-decoration: none;
     font-weight: bold;
     text-align: center;
+    cursor: pointer;
+    border: none;
 }
 
 .btn-checkout {
