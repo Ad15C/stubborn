@@ -13,20 +13,20 @@
             {% endfor %}
         {% endfor %}
 
+        {% if error %}
+            <div class="field-error">
+                {{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
+        {% endif %}
+    
         <form method="post" action="{{ path('app_login') }}">
             <label for="username">Nom d'utilisateur :</label>
-            <input type="text" id="username" name="_username" value="{{ last_username }}" placeholder="ex: johndoe" required>
-            {% if error %}
-                <div class="field-error">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-            {% endif %}
+            <input type="text" id="username" name="_username" value="{{ last_username }}" placeholder="ex: johndoe@gmail.com" required>
 
             <label for="password">Mot de passe :</label>
             <input type="password" id="password" name="_password" placeholder="••••••••" required>
-            {% if error and error.origin and error.origin.name == '_password' %}
-                <div class="field-error">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-            {% endif %}
 
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
             <button type="submit" class="btn-login">Se connecter</button>
         </form>

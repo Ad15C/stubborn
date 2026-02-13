@@ -6,6 +6,7 @@
     <title>{% block title %}Stubborn{% endblock %}</title>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
+
     <style>
         /* --- Header --- */
         header {
@@ -157,15 +158,16 @@
     <nav>
         {% if app.user %}
             <a href="{{ path('home') }}" class="{{ currentRoute == 'home' ? 'active' : '' }}">Accueil</a>
-            <a href="{{ path('products') }}" class="{{ currentRoute == 'products' ? 'active' : '' }}">Boutique</a>
-            <a href="{{ path('cart') }}" class="{{ currentRoute == 'cart' ? 'active' : '' }}">Panier</a>
+            <a href="{{ path('app_products') }}" class="{{ currentRoute == 'app_products' ? 'active' : '' }}">Boutique</a>
+            <a href="{{ path('cart_show') }}" class="{{ currentRoute == 'cart_show' ? 'active' : '' }}">Panier</a>
             <a href="{{ path('app_logout') }}">Se déconnecter</a>
         {% else %}
             <a href="{{ path('home') }}" class="{{ currentRoute == 'home' ? 'active' : '' }}">Accueil</a>
-            <a href="{{ path('app_login') }}" class="{{ currentRoute == 'app_login' ? 'active' : '' }}">Se connecter</a>
             <a href="{{ path('app_register') }}" class="{{ currentRoute == 'app_register' ? 'active' : '' }}">S’inscrire</a>
+            <a href="{{ path('app_login') }}" class="{{ currentRoute == 'app_login' ? 'active' : '' }}">Se connecter</a>
         {% endif %}
     </nav>
+
 </header>
 
 <main>
