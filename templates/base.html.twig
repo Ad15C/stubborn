@@ -1,12 +1,9 @@
-{# templates/base.html.twig #}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Stubborn{% endblock %}</title>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-
-
     <style>
         /* --- Header --- */
         header {
@@ -73,6 +70,7 @@
                 width: 200px;
                 padding: 15px;
                 border: 1px solid #ccc;
+                z-index: 10;
             }
 
             nav.show {
@@ -127,7 +125,6 @@
             color: #ccc;
         }
     </style>
-
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const toggle = document.querySelector('.menu-toggle');
@@ -160,6 +157,11 @@
             <a href="{{ path('home') }}" class="{{ currentRoute == 'home' ? 'active' : '' }}">Accueil</a>
             <a href="{{ path('app_products') }}" class="{{ currentRoute == 'app_products' ? 'active' : '' }}">Boutique</a>
             <a href="{{ path('cart_show') }}" class="{{ currentRoute == 'cart_show' ? 'active' : '' }}">Panier</a>
+
+            {% if 'ROLE_ADMIN' in app.user.roles %}
+                <a href="{{ path('admin_dashboard') }}" class="{{ currentRoute == 'admin_dashboard' ? 'active' : '' }}">Admin</a>
+            {% endif %}
+
             <a href="{{ path('app_logout') }}">Se déconnecter</a>
         {% else %}
             <a href="{{ path('home') }}" class="{{ currentRoute == 'home' ? 'active' : '' }}">Accueil</a>
@@ -167,7 +169,6 @@
             <a href="{{ path('app_login') }}" class="{{ currentRoute == 'app_login' ? 'active' : '' }}">Se connecter</a>
         {% endif %}
     </nav>
-
 </header>
 
 <main>
