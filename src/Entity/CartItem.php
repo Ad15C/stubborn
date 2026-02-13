@@ -27,6 +27,9 @@ class CartItem
     #[ORM\Column(type: 'decimal', precision: 8, scale: 2)]
     private float $price;
 
+    #[ORM\Column(length: 10)]
+    private string $size; 
+
         // Getters & Setters //
         
     public function getId(): ?int
@@ -75,6 +78,17 @@ class CartItem
     public function setPrice(float $price): static
     {
         $this->price = $price;
+        return $this;
+    }
+
+    public function getSize(): string
+    {
+        return $this->size;
+    }
+
+    public function setSize(string $size): static
+    {
+        $this->size = $size;
         return $this;
     }
 }

@@ -6,6 +6,7 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
@@ -21,21 +22,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 180)]
     private ?string $email = null;
-  
+
     #[ORM\Column]
     private array $roles = [];
 
     #[ORM\Column]
     private ?string $password = null;
-   
+
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $deliveryAddress = null;
 
     #[ORM\Column(type: "boolean")]
-    private bool $isVerified = false; // pour vérifier si l'utilisateur a activé son compte
+    private bool $isVerified = false;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $verificationToken = null; // token unique pour l'email
+    private ?string $verificationToken = null;
 
     // Getters & Setters //
 
@@ -63,7 +64,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEmail(string $email): static
     {
         $this->email = $email;
-
         return $this;
     }
 
@@ -130,7 +130,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->verificationToken = $token;
         return $this;
     }
-
 
     public function eraseCredentials(): void
     {

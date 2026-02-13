@@ -5,16 +5,26 @@
     <div class="login-box">
         <h1>Se Connecter</h1>
         <hr>
-        {% if error %}
-            <div class="error">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-        {% endif %}
+
+         {# Flash messages globaux #}
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="flash {{ label }}">{{ message }}</div>
+            {% endfor %}
+        {% endfor %}
 
         <form method="post" action="{{ path('app_login') }}">
             <label for="username">Nom d'utilisateur :</label>
             <input type="text" id="username" name="_username" value="{{ last_username }}" placeholder="ex: johndoe" required>
+            {% if error %}
+                <div class="field-error">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
 
             <label for="password">Mot de passe :</label>
             <input type="password" id="password" name="_password" placeholder="••••••••" required>
+            {% if error and error.origin and error.origin.name == '_password' %}
+                <div class="field-error">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
 
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
@@ -35,15 +45,12 @@
 </div>
 
 <style>
-/* Wrapper centré */
 .login-wrapper {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 80vh;
 }
-
-/* Encadré */
 .login-box {
     width: 350px;
     padding: 30px 40px;
@@ -52,27 +59,21 @@
     background-color: #fff;
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
-
-/* Titres et séparateurs */
 .login-box h1 {
     text-align: center;
     margin-bottom: 10px;
 }
-
 .login-box hr {
     margin-bottom: 20px;
     border: none;
     border-top: 2px solid #eee;
 }
-
-/* Champs du formulaire */
 .login-box label {
     display: block;
     margin-top: 15px;
     font-weight: bold;
     font-size: 0.9em;
 }
-
 .login-box input {
     width: 100%;
     padding: 10px;
@@ -81,8 +82,6 @@
     border: 1px solid #ccc;
     font-size: 0.95em;
 }
-
-/* Boutons */
 .btn-login {
     width: 100%;
     padding: 12px;
@@ -94,11 +93,9 @@
     border-radius: 5px;
     cursor: pointer;
 }
-
 .btn-login:hover {
     background-color: #0056b3;
 }
-
 .btn-register {
     display: block;
     width: 100%;
@@ -111,40 +108,39 @@
     text-decoration: none;
     border-radius: 5px;
 }
-
 .btn-register:hover {
     background-color: #0056b3;
 }
-
-/* Mot de passe oublié */
 .forgot-password {
     text-align: center;
     margin-top: 10px;
     font-size: 0.85em;
 }
-
 .forgot-password a {
     text-decoration: none;
     color: #007BFF;
 }
-
 .forgot-password a:hover {
     text-decoration: underline;
 }
-
-/* Séparateur entre connexion et inscription */
 .separator {
     margin: 20px 0;
     border: none;
     border-top: 1px solid #ddd;
     width: 100%;
 }
-
-/* Messages d'erreur */
-.error {
-    color: red;
-    font-size: 0.9em;
+.flash {
+    padding: 10px;
     margin-bottom: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+.flash.success { background-color: #d4edda; color: #155724; }
+.flash.error { background-color: #f8d7da; color: #721c24; }
+.field-error {
+    color: red;
+    font-size: 0.85em;
+    margin-top: 5px;
 }
 </style>
 {% endblock %}
