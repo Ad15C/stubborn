@@ -24,6 +24,11 @@ class RegistrationController extends AbstractController
         MailerInterface $mailer
     ): Response
     {
+        // Rediriger les admins
+        if ($this->getUser() && in_array('ROLE_ADMIN', $this->getUser()->getRoles())) {
+            return $this->redirectToRoute('admin_dashboard');
+        }
+
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);

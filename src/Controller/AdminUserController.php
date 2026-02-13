@@ -20,6 +20,9 @@ class AdminUserController extends AbstractController
         EntityManagerInterface $em
     ): Response
     {
+        // Autoriser uniquement les admins
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $user = new User();
         $form = $this->createForm(AdminUserFormType::class, $user);
         $form->handleRequest($request);

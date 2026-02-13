@@ -1,0 +1,118 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard Admin{% endblock %}
+
+{% block body %}
+<h1>Dashboard Admin - Gestion des produits</h1>
+
+<div class="admin-dashboard">
+    {% for product in products %}
+        <div class="product-card">
+            <form action="{{ path('admin_product_edit', {'id': product.id}) }}" method="post" enctype="multipart/form-data">
+                <div class="product-image">
+                    <img src="{{ asset('images/products/' ~ product.image) }}" alt="{{ product.name }}">
+                </div>
+
+                <div class="product-info">
+                    <label>Nom:</label>
+                    <input type="text" name="name" value="{{ product.name }}">
+
+                    <label>Prix (€):</label>
+                    <input type="number" step="0.01" name="price" value="{{ product.price }}">
+
+                    <label>Image:</label>
+                    <input type="file" name="image">
+
+                    <label>Stock XS:</label>
+                    <input type="number" name="stock_xs" value="{{ product.stock_xs }}">
+                    <label>Stock S:</label>
+                    <input type="number" name="stock_s" value="{{ product.stock_s }}">
+                    <label>Stock M:</label>
+                    <input type="number" name="stock_m" value="{{ product.stock_m }}">
+                    <label>Stock L:</label>
+                    <input type="number" name="stock_l" value="{{ product.stock_l }}">
+                    <label>Stock XL:</label>
+                    <input type="number" name="stock_xl" value="{{ product.stock_xl }}">
+
+                    <label>Mettre en avant:</label>
+                    <input type="checkbox" name="is_featured" value="1" {% if product.is_featured %}checked{% endif %}>
+                </div>
+
+                <div class="product-actions">
+                    <button type="submit" class="btn btn-primary">Modifier</button>
+                    <a href="{{ path('admin_product_delete', {'id': product.id}) }}" class="btn btn-danger" onclick="return confirm('Voulez-vous vraiment supprimer ce produit ?');">Supprimer</a>
+                </div>
+            </form>
+        </div>
+    {% else %}
+        <p>Aucun produit trouvé.</p>
+    {% endfor %}
+</div>
+
+<style>
+.admin-dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.product-card {
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 10px;
+    background: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.product-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.product-info label {
+    font-weight: bold;
+}
+
+.product-info input[type="text"],
+.product-info input[type="number"],
+.product-info input[type="file"] {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 5px;
+}
+
+.product-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.btn {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+}
+
+.btn-primary {
+    background-color: #007bff;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+}
+</style>
+{% endblock %}
