@@ -8,6 +8,7 @@
 /public/bundles/
 /public/assets/
 /assets/vendor/
+/var/*.db
 
 ### PHPUnit ###
 /phpunit.xml

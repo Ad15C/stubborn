@@ -21,7 +21,7 @@ class Product
     private ?float $price = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $image = null;
+    private string $image = 'images/products/default.jpeg';
 
     #[ORM\Column(type: "boolean")]
     private bool $isFeatured = false;
