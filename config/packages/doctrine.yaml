@@ -25,8 +25,9 @@ when@test:
     doctrine:
         dbal:
             driver: 'pdo_sqlite'
-            url: '%env(DATABASE_URL)%'  # Base mémoire
+            url: 'sqlite:///%kernel.project_dir%/var/test.db'
             memory: true
         orm:
             auto_generate_proxy_classes: true
             auto_mapping: true
+
