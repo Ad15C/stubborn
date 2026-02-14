@@ -36,3 +36,22 @@ yarn.lock
 package-lock.json
 /dist/
 /build/
+
+### Symfony env files ###
+.env.test.local
+.env.dev.local
+.env.prod.local
+
+### Symfony secrets ###
+/config/secrets/*/*.decrypt.private.php
+
+### Panther ###
+/var/error-screenshots/
+
+### Database ###
+*.sqlite
+*.sqlite3
+*.db
+
+### PHPUnit ###
+/phpunit.xml.dist.local

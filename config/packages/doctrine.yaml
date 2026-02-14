@@ -26,6 +26,7 @@ when@test:
         dbal:
             driver: 'pdo_sqlite'
             url: '%env(DATABASE_URL)%'  # Base mémoire
+            memory: true
         orm:
             auto_generate_proxy_classes: true
             auto_mapping: true
