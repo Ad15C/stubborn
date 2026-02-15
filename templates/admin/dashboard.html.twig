@@ -5,44 +5,94 @@
 {% block body %}
 <h1>Dashboard Admin - Gestion des produits</h1>
 
+{# Flash messages #}
+{% for label, messages in app.flashes %}
+    {% for message in messages %}
+        <div class="alert alert-{{ label }}">{{ message }}</div>
+    {% endfor %}
+{% endfor %}
+
+<!-- Formulaire Ajouter produit -->
+<div class="card add-product-card">
+    <h2>Ajouter un produit</h2>
+    <form action="{{ path('admin_product_add') }}" method="post" enctype="multipart/form-data">
+        <label for="add-name">Nom:</label>
+        <input type="text" name="name" id="add-name" required>
+
+        <label for="add-price">Prix (€):</label>
+        <input type="number" step="0.01" name="price" id="add-price" required>
+
+        <label for="add-image">Image:</label>
+        <input type="file" name="image" id="add-image">
+
+        <fieldset>
+            <legend>Stock par taille</legend>
+            <label for="add-stock-xs">XS:</label>
+            <input type="number" name="stock_xs" id="add-stock-xs" value="0">
+            <label for="add-stock-s">S:</label>
+            <input type="number" name="stock_s" id="add-stock-s" value="0">
+            <label for="add-stock-m">M:</label>
+            <input type="number" name="stock_m" id="add-stock-m" value="0">
+            <label for="add-stock-l">L:</label>
+            <input type="number" name="stock_l" id="add-stock-l" value="0">
+            <label for="add-stock-xl">XL:</label>
+            <input type="number" name="stock_xl" id="add-stock-xl" value="0">
+        </fieldset>
+
+        <label for="add-featured">Mettre en avant:</label>
+        <input type="checkbox" name="is_featured" id="add-featured" value="1">
+
+        <button type="submit" class="btn btn-primary">Ajouter</button>
+    </form>
+</div>
+
+<!-- Liste des produits existants -->
 <div class="admin-dashboard">
     {% for product in products %}
         <div class="product-card">
-            <form action="{{ path('admin_product_edit', {'id': product.id}) }}" method="post" enctype="multipart/form-data">
+            <!-- Formulaire Modification -->
+            <form id="update-product-{{ product.id }}" action="{{ path('admin_product_update', {'id': product.id}) }}" method="post" enctype="multipart/form-data">
                 <div class="product-image">
-                    <img src="{{ asset('images/products/' ~ product.image) }}" alt="{{ product.name }}">
+                    <img src="{{ asset('images/products/' ~ (product.image ?: 'default.jpeg')) }}" alt="{{ product.name }}">
                 </div>
 
                 <div class="product-info">
-                    <label>Nom:</label>
-                    <input type="text" name="name" value="{{ product.name }}">
+                    <label for="name-{{ product.id }}">Nom:</label>
+                    <input type="text" name="name" id="name-{{ product.id }}" value="{{ product.name }}" required>
 
-                    <label>Prix (€):</label>
-                    <input type="number" step="0.01" name="price" value="{{ product.price }}">
+                    <label for="price-{{ product.id }}">Prix (€):</label>
+                    <input type="number" step="0.01" name="price" id="price-{{ product.id }}" value="{{ product.price }}" required>
 
-                    <label>Image:</label>
-                    <input type="file" name="image">
+                    <label for="image-{{ product.id }}">Image:</label>
+                    <input type="file" name="image" id="image-{{ product.id }}">
 
-                    <label>Stock XS:</label>
-                    <input type="number" name="stock_xs" value="{{ product.stock_xs }}">
-                    <label>Stock S:</label>
-                    <input type="number" name="stock_s" value="{{ product.stock_s }}">
-                    <label>Stock M:</label>
-                    <input type="number" name="stock_m" value="{{ product.stock_m }}">
-                    <label>Stock L:</label>
-                    <input type="number" name="stock_l" value="{{ product.stock_l }}">
-                    <label>Stock XL:</label>
-                    <input type="number" name="stock_xl" value="{{ product.stock_xl }}">
+                    <fieldset>
+                        <legend>Stock par taille</legend>
+                        <label for="stock-xs-{{ product.id }}">XS:</label>
+                        <input type="number" name="stock_xs" id="stock-xs-{{ product.id }}" value="{{ product.stockXS }}">
+                        <label for="stock-s-{{ product.id }}">S:</label>
+                        <input type="number" name="stock_s" id="stock-s-{{ product.id }}" value="{{ product.stockS }}">
+                        <label for="stock-m-{{ product.id }}">M:</label>
+                        <input type="number" name="stock_m" id="stock-m-{{ product.id }}" value="{{ product.stockM }}">
+                        <label for="stock-l-{{ product.id }}">L:</label>
+                        <input type="number" name="stock_l" id="stock-l-{{ product.id }}" value="{{ product.stockL }}">
+                        <label for="stock-xl-{{ product.id }}">XL:</label>
+                        <input type="number" name="stock_xl" id="stock-xl-{{ product.id }}" value="{{ product.stockXL }}">
+                    </fieldset>
 
-                    <label>Mettre en avant:</label>
-                    <input type="checkbox" name="is_featured" value="1" {% if product.is_featured %}checked{% endif %}>
-                </div>
-
-                <div class="product-actions">
-                    <button type="submit" class="btn btn-primary">Modifier</button>
-                    <a href="{{ path('admin_product_delete', {'id': product.id}) }}" class="btn btn-danger" onclick="return confirm('Voulez-vous vraiment supprimer ce produit ?');">Supprimer</a>
+                    <label for="featured-{{ product.id }}">Mettre en avant:</label>
+                    <input type="checkbox" name="is_featured" id="featured-{{ product.id }}" value="1" {% if product.isFeatured %}checked{% endif %}>
                 </div>
             </form>
+
+            <!-- Actions -->
+            <div class="product-actions">
+                <button type="submit" form="update-product-{{ product.id }}" class="btn btn-primary">Modifier</button>
+
+                <form action="{{ path('admin_product_delete', {'id': product.id}) }}" method="post" onsubmit="return confirm('Voulez-vous vraiment supprimer ce produit ?');">
+                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                </form>
+            </div>
         </div>
     {% else %}
         <p>Aucun produit trouvé.</p>
@@ -52,67 +102,40 @@
 <style>
 .admin-dashboard {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 20px;
     margin-top: 20px;
 }
-
-.product-card {
+.product-card, .add-product-card {
     border: 1px solid #ccc;
     padding: 15px;
     border-radius: 10px;
     background: #f9f9f9;
     display: flex;
     flex-direction: column;
+    transition: transform 0.2s ease;
 }
-
-.product-image img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 5px;
-    margin-bottom: 10px;
+.product-card:hover, .add-product-card:hover { transform: translateY(-3px); }
+.product-image img { max-width: 100%; height: auto; border-radius: 5px; margin-bottom: 10px; object-fit: cover; }
+.product-info { display: flex; flex-direction: column; gap: 8px; }
+.product-info label { font-weight: bold; }
+.product-info input[type="text"], .product-info input[type="number"], .product-info input[type="file"] { width: 100%; padding: 5px; box-sizing: border-box; }
+.product-actions { display: flex; justify-content: space-between; flex-wrap: wrap; margin-top: 10px; gap: 10px; }
+.btn { padding: 8px 12px; border: none; border-radius: 5px; color: white; cursor: pointer; text-align: center; flex: 1 1 45%; }
+.btn-primary { background-color: #007bff; }
+.btn-danger { background-color: #dc3545; }
+.alert { padding: 10px; border-radius: 5px; margin-bottom: 15px; color: white; }
+.alert-success { background-color: #28a745; }
+.alert-error { background-color: #dc3545; }
+@media (max-width: 768px) {
+    .admin-dashboard { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .product-actions { flex-direction: column; gap: 5px; }
+    .btn { flex: 1 1 100%; }
 }
-
-.product-info {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.product-info label {
-    font-weight: bold;
-}
-
-.product-info input[type="text"],
-.product-info input[type="number"],
-.product-info input[type="file"] {
-    width: 100%;
-    padding: 5px;
-    margin-bottom: 5px;
-}
-
-.product-actions {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-}
-
-.btn {
-    padding: 8px 12px;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    cursor: pointer;
-    text-decoration: none;
-    text-align: center;
-}
-
-.btn-primary {
-    background-color: #007bff;
-}
-
-.btn-danger {
-    background-color: #dc3545;
+@media (max-width: 480px) {
+    .admin-dashboard { grid-template-columns: 1fr; }
+    .product-info input { font-size: 14px; }
+    .btn { font-size: 14px; padding: 6px 10px; }
 }
 </style>
 {% endblock %}
