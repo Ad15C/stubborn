@@ -96,4 +96,28 @@ class LoginTest extends WebTestCase
         parent::tearDown();
         $this->client = null;
     }
+
+    public function testUserCanLogout(): void
+    {
+        // 1. Connecter un utilisateur
+        $user = $this->entityManager
+            ->getRepository(User::class)
+            ->findOneBy(['email' => 'test@test.com']);
+
+        $this->client->loginUser($user);
+
+        // 2. Appeler la route logout
+        $this->client->request('GET', '/logout');
+
+        // 3. Vérifier la redirection
+        $this->assertResponseRedirects('/');
+
+        // 4. Suivre la redirection
+        $this->client->followRedirect();
+        $this->assertResponseIsSuccessful();
+
+        // 5. Vérifier que l'utilisateur n'est plus connecté
+        $this->assertNull($this->client->getContainer()->get('security.token_storage')->getToken());
+    }
+
 }
