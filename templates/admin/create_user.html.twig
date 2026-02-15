@@ -5,12 +5,82 @@
 {% block body %}
 <h1>Créer un utilisateur (Admin)</h1>
 
-{{ form_start(adminUserForm) }}
-    {{ form_row(adminUserForm.name) }}
-    {{ form_row(adminUserForm.email) }}
-    {{ form_row(adminUserForm.plainPassword.first) }}
-    {{ form_row(adminUserForm.plainPassword.second) }}
-    {{ form_row(adminUserForm.roles) }}
-    <button class="btn btn-primary">Créer</button>
-{{ form_end(adminUserForm) }}
+<div class="admin-form-container">
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="flash-{{ label }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    {{ form_start(adminUserForm) }}
+        <div class="form-group">
+            {{ form_row(adminUserForm.name) }}
+        </div>
+        <div class="form-group">
+            {{ form_row(adminUserForm.email) }}
+        </div>
+        <div class="form-group password-group">
+            {{ form_row(adminUserForm.plainPassword.first) }}
+            {{ form_row(adminUserForm.plainPassword.second) }}
+        </div>
+        <div class="form-group">
+            {{ form_row(adminUserForm.roles) }}
+        </div>
+        <button class="btn btn-primary">Créer</button>
+    {{ form_end(adminUserForm) }}
+</div>
+
+<style>
+/* Container pour centrer et limiter la largeur */
+.admin-form-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 15px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Espacement entre les champs */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+/* Bouton */
+.btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+/* Pour les champs de mot de passe côte à côte sur grand écran */
+.password-group {
+    display: flex;
+    gap: 10px;
+}
+
+.password-group .form-row {
+    flex: 1;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .password-group {
+        flex-direction: column;
+    }
+}
+</style>
 {% endblock %}
