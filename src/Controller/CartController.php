@@ -118,7 +118,8 @@ class CartController extends AbstractController
         if ($cart) {
             foreach ($cart->getItems() as $item) {
                 if ($item->getId() === $id) {
-                    $em->remove($item);
+                    $cart->removeItem($item); // retire de la collection
+                    $em->remove($item);       // supprime de la DB
                     break;
                 }
             }
