@@ -1,66 +1,98 @@
-# Application e-commerce Stubborn
+# Stubborn – Application e-commerce Symfony
 
-## Description
-Stubborn Sweatshirts est une application e-commerce locale permettant de parcourir et acheter des sweat-shirts de la marque Stubborn. L'application inclut un système de gestion des utilisateurs, un panier interactif, et un backoffice pour les administrateurs.
+Application e-commerce développée en PHP permettant de parcourir et acheter des sweat-shirts de la marque fictive Stubborn.
 
-Elle est développée dans le cadre d’un projet pédagogique et inclut les fonctionnalités suivantes :
-- Gestion des utilisateurs (inscription, connexion, activation par email)
-- Parcours des produits
-- Gestion du panier et achat-test via Stripe
-- Backoffice pour gérer les produits
+Le projet inclut :
+- un système d’authentification utilisateur
+- une gestion du panier
+- un paiement test avec Stripe
+- un backoffice administrateur
+- la gestion des produits et des stocks
 
----
+# Technologies utilisées
+- PHP
+- Twig
+- Symfony
+- Stripe
+- HTML/CSS
+- JavaScript
+- MySQL
+- Git & GitHub
 
-## Fonctionnalités principales
+# Compétences développées
+- Développement backend avec Symfony
+- Gestion des utilisateurs
+- Authentification et sécurité
+- Intégration de Stripe
+- Gestion de panier e-commerce
+- Gestion de stock
+- Création d'un backoffice administrateur
+- Architecture MVC
+- Utilisation de Twig
 
-### Pages utilisateurs
-- **Page d’accueil (`/`)**
-  - Menu dynamique selon l’état de connexion
-    - Non connecté : Accueil / Se connecter / S’inscrire
-    - Connecté : Accueil / Boutique / Panier / Se déconnecter
-  - Trois sweat-shirts mis en avant
-  - Présentation courte de la société Stubborn
+# Fonctionnalités principales
 
-- **Page de connexion (`/login`)**
-  - Formulaire de connexion
-  - Liens vers l’accueil et vers l’inscription
+## Utilisateurs
+- inscription
+- connexion
+- activation de compte par email
+- gestion des sessions
 
-- **Page d’inscription (`/register`)**
-  - Formulaire d’inscription
-  - Activation du compte par email
-  - Liens vers la page de connexion
+## Boutique
+- affichage des produits
+- page produit détaillée
+- sélection des tailles
+- ajout au panier
 
-- **Page Produits (`/products`)**
-  - Liste complète des sweat-shirts avec images, noms et prix
-  - Bouton « Voir » pour chaque produit
+## Panier
+- suppression de produits
+- calcul du panier
+- paiement via Stripe
 
-- **Page Produit (`/product/id`)**
-  - Détails du sweat-shirt (image, nom, prix)
-  - Sélection de la taille
-  - Bouton « Ajouter au panier »
+## Backoffice
+- ajout / modification / suppression des produits
+- gestion des stocks
+- gestion des produits mis en avant
 
-- **Page Panier (`/cart`)**
-  - Liste des produits ajoutés
-  - Bouton pour supprimer un produit
-  - Lien pour continuer les achats
-  - Paiement test via Stripe
+# Structure du projet
+```text
+stubborn/
+├── src/
+├── templates/
+├── public/
+├── config/
+├── migrations/
+├── tests/
+└── README.md
+```
 
-### Backoffice (`/admin`)
-- Accessible uniquement aux administrateurs
-- Gestion complète des sweat-shirts :
-  - Ajouter / modifier / supprimer un sweat-shirt
-  - Gérer la mise en avant sur la page d’accueil
-  - Mettre à jour les stocks par taille
+# Sécurité
 
----
+Les données sensibles (clés API Stripe, accès base de données, variables d’environnement) ne sont pas incluses dans le repository.
 
-## Installation et exécution
+
+# Installation et exécution
 
 1. **Cloner le projet**
 ```bash
 git clone <URL_DU_REPO_GITHUB>
 cd nom_du_projet
+```
 
-Pour toutes informations:
-Adeline CANON
-ad15canon@gmail.com
+2. **Installer les dépendances**
+```bash
+composer install
+```
+
+3. Configurer l'environnement
+Créer un fichier **.env.local** et configurer:
+- la base de données
+- les clés Stripe
+
+4. Lancer le serveur
+```bash
+symfony server:start
+```
+
+# Contact
+📧 ad15canon@gmail.com
