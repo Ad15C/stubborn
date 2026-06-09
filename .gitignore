@@ -1,7 +1,13 @@
 ### Symfony ###
+# Environnement variables
+.env
 /.env.local
 /.env.local.php
 /.env.*.local
+.env.*
+!.env.example
+
+
 /config/secrets/prod/prod.decrypt.private.php
 /var/
 /vendor/
